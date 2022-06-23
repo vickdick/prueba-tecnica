@@ -4,21 +4,13 @@ const jwt = require('jsonwebtoken');
 const Usuario = require('../models/usuario.model');
 
 const getUsuarios = async (req = request, res = response) => {
-    const {token} = req.headers;
-
-    try{
-        const decoded = jwt.verify(token, process.env.TOKEN_KEY);
-        const usuarios = await Usuario.find();
+   
+    const usuarios = await Usuario.find();
         
-        res.status(200).json({
-            msg:"Lista de usuarios",
-            data: usuarios
-        });
-    }catch(err){
-        return res.status(400).json({msg: err});
-    }
-    
-    //if(decoded) return res.json(401).json({msg: "Token invalido!!!"});
+    res.status(200).json({
+        msg:"Lista de usuarios",
+        data: usuarios
+    }); 
     
 }
 
@@ -45,7 +37,6 @@ const postUsuario = async (req, res = response) => {
 const postUsuarioLogin = async(req, res = response) => {
     const {usuario, password} = req.body;
 
-    //const usr = await Usuario.findOne({usuario});
     const usr = await Usuario.findOne({ $or: [ {telefono: usuario}, {usuario} ] });
     //const usuario = data.find(element => element.nombre === nombre) && data.find(element => element.password === password);
 
